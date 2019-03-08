@@ -1,0 +1,9 @@
+#nebula_db_writer
+#2019-01-15
+greenify==0.3.2
+click==7.0
+babel-python==1.1.1
+threathunter-common==1.1.1
+complexconfig==1.1.1
+PyMySQL==0.9.3
+mmh3==2.5.1
