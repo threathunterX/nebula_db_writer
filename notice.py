@@ -10,6 +10,7 @@ from gevent.queue import Empty
 from threathunter_common.metrics.metricsrecorder import MetricsRecorder
 from threathunter_common.metrics.redismetrics import RedisMetrics
 from threathunter_common.util import millis_now
+import redis
 
 import settings
 from model import Notice
@@ -97,7 +98,9 @@ def gen_notice(event):
 def notice_worker(db):
     conn = db.connect()
     redisMetrics = RedisMetrics(settings.Redis_Host, settings.Redis_Port)
-
+    noticeRedis = redis.Redis(host=settings.Redis_Host,
+                              port=settings.Redis_Port,
+                              password=settings.Redis_Password)
     try:
         while True:
             try:
@@ -114,7 +117,8 @@ def notice_worker(db):
             try:
                 noticeTimestamp = notice.get("timestamp", '')
                 noticeData = json.dumps(notice)
-                logger.debug("notice: \n + %s" % noticeData)
+                noticeRedis.publish("nebula.realtime.notice", noticeData)
+                logger.info("publish to redis (nebula.realtime.notice): {}".format(noticeData))
                 redisMetrics.add_metrics("db.write", "notice", {"app": 'db.write.notice'},
                                                         noticeData, 1800, noticeTimestamp)
             except Exception as e0:
