@@ -65,6 +65,7 @@ WebUI_Port = _config.get_int("webui_port", 9001)
 
 Redis_Host = _config.get_string('redis_host', "redis")
 Redis_Port = _config.get_int('redis_port', 6379)
+Redis_Password = _config.get_int('redis_password', '')
 
 Influxdb_Url = _config.get_string('influxdb_url',"http://127.0.0.1:8086/")
 Babel_Mode = _config.get_string('babel_server', "redis")
